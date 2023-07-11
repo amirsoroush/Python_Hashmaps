@@ -23,7 +23,7 @@ It's tested on Python 3.10 & 3.11.
 
 # Installation
 
-If have `git` installed:
+If you have `git` installed:
 
 ```none
 pip install git+https://github.com/amirsoroush/Python_Hashmaps.git
@@ -36,7 +36,7 @@ pip install https://github.com/amirsoroush/Python_Hashmaps/tarball/main
 
 # Usage
 
-It has the same interface as the built-in `dict`.
+It has the same interface as the built-in `dict` class.
 
 ```python
 >>> from pyhashmaps import (
@@ -49,6 +49,7 @@ It has the same interface as the built-in `dict`.
 ...                     )
 >>>
 >>> hashmap = LinearProbingHashMap()
+>>> hashmap = LinearProbingHashMap[str, int]()
 >>> hashmap["a"] = 10
 >>> hashmap
 LinearProbingHashMap({'a': 10})
