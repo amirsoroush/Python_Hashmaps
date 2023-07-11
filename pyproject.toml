@@ -1,0 +1,11 @@
+[project]
+name = "pyhashmaps"
+version = "1.0.0"
+readme = "README.md"
+authors = [{ name = "amirsoroush", email = "amirsoroush.dev@gmail.com" }]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
