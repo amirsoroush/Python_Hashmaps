@@ -75,3 +75,10 @@ class BaseTestCase(base):
         for i in range(0, n, 2):
             del hashmap[f"_{i}_"]
         self.assertEqual(len(hashmap), n // 2)
+
+    def test_repr(self):
+        hashmap = self.cls()
+        class_name = hashmap.__class__.__name__
+        self.assertEqual(repr(hashmap), f"{class_name}({{}})")
+        hashmap["A"] = 30
+        self.assertEqual(repr(hashmap), f"{class_name}({{'A': 30}})")

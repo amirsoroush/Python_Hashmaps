@@ -38,6 +38,11 @@ class BaseHashMap(MutableMapping[K, V]):
     def __len__(self) -> int:
         return self._len
 
+    def __repr__(self) -> str:
+        class_name = self.__class__.__name__
+        items = ", ".join(f"{k!r}: {v!r}" for k, v in self.items())
+        return f"{class_name}({{{items}}})"
+
     def _hash_func(self, key: K) -> int:
         return hash(key)
 
