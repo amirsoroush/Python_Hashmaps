@@ -1,13 +1,13 @@
 from abc import abstractmethod
-from collections.abc import Hashable, MutableMapping
+from collections.abc import Hashable, Iterator, MutableMapping
 from dataclasses import dataclass
-from typing import Generic, Protocol, TypeVar
+from typing import Any, Generic, Protocol, TypeVar
 
 
 class Comparable(Hashable, Protocol):
     """Protocol for annotating comparable and Hashable types."""
 
-    def __lt__(self, other: "Comparable") -> bool:
+    def __lt__(self, other: Any) -> bool:
         ...
 
 
@@ -26,6 +26,29 @@ class HashEntry(Generic[K, V]):
     hash_value: int
     key: K
     value: V
+
+
+class Chain(Protocol[K, V]):
+    def __iter__(self) -> Iterator[HashEntry[K, V]]:
+        ...
+
+    def __len__(self) -> int:
+        ...
+
+    def find(self, key: K) -> HashEntry[K, V]:
+        ...
+
+    def insert(self, item: HashEntry[K, V]) -> None:
+        ...
+
+    def delete(self, key: K) -> None:
+        ...
+
+    # `.append_at_end()` is a faster route than `.insert()` to insert items
+    # since we no longer have to check the existing items.
+    # All items are different.
+    def append_at_end(self, item: HashEntry[K, V]) -> None:
+        ...
 
 
 class BaseHashMap(MutableMapping[K, V]):

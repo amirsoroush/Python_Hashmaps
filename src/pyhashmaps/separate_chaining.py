@@ -1,8 +1,7 @@
 from collections.abc import Iterator
 
-from .base import BaseHashMap, HashEntry, K, V
+from .base import BaseHashMap, Chain, HashEntry, K, V
 from .chains import BinarySearchTree, DynamicArray, LinkedList
-from .protocols import Chain
 
 
 class SeparateChainingHashMap(BaseHashMap[K, V]):

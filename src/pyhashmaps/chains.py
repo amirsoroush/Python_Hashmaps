@@ -2,8 +2,7 @@ from collections.abc import Generator, Iterator
 from dataclasses import dataclass, field
 from typing import Generic, Optional, cast
 
-from .base import Comp_K, HashEntry, K, V, is_same
-from .protocols import Chain
+from .base import Chain, Comp_K, HashEntry, K, V, is_same
 
 
 @dataclass(slots=True)
