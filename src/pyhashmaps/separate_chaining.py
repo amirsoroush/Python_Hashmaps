@@ -1,6 +1,6 @@
 from collections.abc import Iterator
 
-from .base import BaseHashMap, Chain, HashEntry, K, V
+from .base import BaseHashMap, Chain, Comp_K, HashEntry, K, V
 from .chains import BinarySearchTree, DynamicArray, LinkedList
 
 
@@ -78,5 +78,5 @@ class LinkedListHashMap(SeparateChainingHashMap[K, V]):
     chain: type[Chain[K, V]] = LinkedList
 
 
-class BSTHashMap(SeparateChainingHashMap[K, V]):
-    chain: type[Chain[K, V]] = BinarySearchTree
+class BSTHashMap(SeparateChainingHashMap[Comp_K, V]):
+    chain: type[Chain[Comp_K, V]] = BinarySearchTree
