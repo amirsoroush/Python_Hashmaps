@@ -10,6 +10,12 @@ base = unittest.TestCase if TYPE_CHECKING else object
 class BaseTestCase(base):
     cls: BaseHashMap
 
+    def test_constructor(self):
+        hashmap1 = self.cls({"a": 10, "b": 20, "c": 30})
+        hashmap2 = self.cls([("a", 10), ("b", 20), ("c", 30)])
+        self.assertEqual(hashmap1.items(), {("a", 10), ("b", 20), ("c", 30)})
+        self.assertEqual(hashmap2.items(), {("a", 10), ("b", 20), ("c", 30)})
+
     def test_add_item(self):
         hashmap = self.cls()
         hashmap["foo"] = 10
@@ -82,3 +88,8 @@ class BaseTestCase(base):
         self.assertEqual(repr(hashmap), f"{class_name}({{}})")
         hashmap["A"] = 30
         self.assertEqual(repr(hashmap), f"{class_name}({{'A': 30}})")
+
+    def test_equality(self):
+        hashmap = self.cls({"a": 10, "b": 20, "c": 30})
+        dictionary = {"a": 10, "b": 20, "c": 30}
+        self.assertEqual(hashmap, dictionary)

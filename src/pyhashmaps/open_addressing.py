@@ -2,7 +2,7 @@ from abc import abstractmethod
 from collections.abc import Generator, Iterator
 from enum import Enum
 
-from .base import BaseHashMap, HashEntry, K, V, is_same
+from .base import BaseHashMap, HashEntry, HashMapArgument, K, V, is_same
 
 
 class NotExist(Enum):
@@ -20,13 +20,22 @@ DELETED = NotExist.deleted
 
 
 class OpenAddressingHashMap(BaseHashMap[K, V]):
-    def __init__(self, *, initial_size: int = 64, resize_factor: float = 0.7) -> None:
+    def __init__(
+        self,
+        mapping_or_iterable: HashMapArgument[K, V] | None = None,
+        /,
+        *,
+        initial_size: int = 64,
+        resize_factor: float = 0.7,
+    ) -> None:
         super().__init__(initial_size)
 
         if not 0.0 < resize_factor < 1.0:
             raise ValueError("resize_factor must be between 0 and 1.")
         self.resize_factor = resize_factor
         self.slots: list[HashEntry[K, V] | NotExist] = [EMPTY] * self.size
+        if mapping_or_iterable is not None:
+            self.update(mapping_or_iterable)
 
     def __iter__(self) -> Iterator[K]:
         for item in self.slots:
@@ -123,13 +132,17 @@ class QuadraticProbingHashMap(OpenAddressingHashMap[K, V]):
 class DoubleHashingHashMap(OpenAddressingHashMap[K, V]):
     def __init__(
         self,
+        mapping_or_iterable: HashMapArgument[K, V] | None = None,
+        /,
         *,
         initial_size: int = 64,
         resize_factor: float = 0.7,
-        prime_number: int = 7
+        prime_number: int = 7,
     ) -> None:
-        super().__init__(initial_size=initial_size, resize_factor=resize_factor)
         self._prime = prime_number
+        super().__init__(
+            mapping_or_iterable, initial_size=initial_size, resize_factor=resize_factor
+        )
 
     def _hash_func2(self, key: K) -> int:
         return self._prime - (self._hash_func(key) % self._prime)

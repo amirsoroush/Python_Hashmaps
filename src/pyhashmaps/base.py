@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from collections.abc import Hashable, Iterator, MutableMapping
+from collections.abc import Hashable, Iterator, MutableMapping, Mapping, Iterable
 from dataclasses import dataclass
 from typing import Any, Generic, Protocol, TypeVar
 
@@ -14,6 +14,7 @@ class Comparable(Hashable, Protocol):
 K = TypeVar("K", bound=Hashable)
 Comp_K = TypeVar("Comp_K", bound=Comparable)
 V = TypeVar("V")
+HashMapArgument = Mapping[K, V] | Iterable[tuple[K, V]]
 
 
 def is_same(k1: K, k2: K) -> bool:

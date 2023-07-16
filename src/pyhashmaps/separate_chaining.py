@@ -1,16 +1,25 @@
 from collections.abc import Iterator
 
-from .base import BaseHashMap, Chain, Comp_K, HashEntry, K, V
+from .base import BaseHashMap, Chain, Comp_K, HashEntry, HashMapArgument, K, V
 from .chains import BinarySearchTree, DynamicArray, LinkedList
 
 
 class SeparateChainingHashMap(BaseHashMap[K, V]):
     chain: type[Chain[K, V]]
 
-    def __init__(self, initial_size: int = 40, max_chain_size: int = 5) -> None:
+    def __init__(
+        self,
+        mapping_or_iterable: HashMapArgument[K, V] | None = None,
+        /,
+        *,
+        initial_size: int = 40,
+        max_chain_size: int = 5,
+    ) -> None:
         super().__init__(initial_size)
         self._max_chain_size = max_chain_size
         self.slots: list[Chain[K, V]] = [self.chain() for _ in range(self.size)]
+        if mapping_or_iterable is not None:
+            self.update(mapping_or_iterable)
 
     def __iter__(self) -> Iterator[K]:
         for chain in self.slots:
@@ -71,12 +80,12 @@ class SeparateChainingHashMap(BaseHashMap[K, V]):
 
 
 class DynamicArrayHashMap(SeparateChainingHashMap[K, V]):
-    chain: type[Chain[K, V]] = DynamicArray
+    chain: type[DynamicArray[K, V]] = DynamicArray
 
 
 class LinkedListHashMap(SeparateChainingHashMap[K, V]):
-    chain: type[Chain[K, V]] = LinkedList
+    chain: type[LinkedList[K, V]] = LinkedList
 
 
 class BSTHashMap(SeparateChainingHashMap[Comp_K, V]):
-    chain: type[Chain[Comp_K, V]] = BinarySearchTree
+    chain: type[BinarySearchTree[Comp_K, V]] = BinarySearchTree
