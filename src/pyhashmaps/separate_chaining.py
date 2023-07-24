@@ -1,3 +1,4 @@
+import ctypes
 from collections.abc import Iterator
 
 from .base import BaseHashMap, Chain, Comp_K, HashEntry, HashMapArgument, K, V
@@ -62,6 +63,17 @@ class SeparateChainingHashMap(BaseHashMap[K, V]):
 
         if chain_length_before != chain_length_after:
             self._len -= 1
+
+    def __sizeof__(self) -> int:
+        instance_size = super().__sizeof__()
+        pointer_size = ctypes.sizeof(ctypes.c_void_p)
+        items_size = sum(
+            (
+                pointer_size + sum(pointer_size * 3 for _hash_entry in bucket)
+                for bucket in self.slots
+            )
+        )
+        return instance_size + items_size
 
     def _need_increase(self, chain_size: int) -> bool:
         return chain_size >= self._max_chain_size

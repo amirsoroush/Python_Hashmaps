@@ -1,3 +1,4 @@
+import ctypes
 from abc import abstractmethod
 from collections.abc import Generator, Iterator
 from enum import Enum
@@ -85,6 +86,12 @@ class OpenAddressingHashMap(BaseHashMap[K, V]):
                 break
 
         self._len -= 1
+
+    def __sizeof__(self) -> int:
+        instance_size = super().__sizeof__()
+        pointer_size = ctypes.sizeof(ctypes.c_void_p)
+        items_size = len(self.slots) * (3 * pointer_size)
+        return instance_size + items_size
 
     def _need_increase(self) -> bool:
         return len(self) / self.size >= self.resize_factor
