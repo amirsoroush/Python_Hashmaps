@@ -7,6 +7,8 @@ from .base import Chain, Comp_K, HashEntry, K, V, is_same
 
 @dataclass(slots=True)
 class LinkedListNode(Generic[K, V]):
+    """Node implementation used in the LinkedList class"""
+
     data: HashEntry[K, V]
     next: Optional["LinkedListNode[K, V]"] = field(
         default=None, repr=False, compare=False
@@ -15,6 +17,8 @@ class LinkedListNode(Generic[K, V]):
 
 @dataclass(slots=True)
 class BSTNode(Generic[Comp_K, V]):
+    """Node implementation used in the BinarySearchTree class"""
+
     data: HashEntry[Comp_K, V]
     left: Optional["BSTNode[Comp_K, V]"] = field(
         default=None, repr=False, compare=False
