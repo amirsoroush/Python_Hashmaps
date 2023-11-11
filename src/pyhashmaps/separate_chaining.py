@@ -1,8 +1,13 @@
+from __future__ import annotations
+
 import ctypes
-from collections.abc import Iterator
+from typing import TYPE_CHECKING
 
 from .base import BaseHashMap, Chain, Comp_K, HashEntry, HashMapArgument, K, V
 from .chains import BinarySearchTree, DynamicArray, LinkedList
+
+if TYPE_CHECKING:
+    from collections.abc import Iterator
 
 
 class SeparateChainingHashMap(BaseHashMap[K, V]):
@@ -68,10 +73,8 @@ class SeparateChainingHashMap(BaseHashMap[K, V]):
         instance_size = super().__sizeof__()
         pointer_size = ctypes.sizeof(ctypes.c_void_p)
         items_size = sum(
-            (
-                pointer_size + sum(pointer_size * 3 for _hash_entry in bucket)
-                for bucket in self.slots
-            )
+            pointer_size + sum(pointer_size * 3 for _hash_entry in bucket)
+            for bucket in self.slots
         )
         return instance_size + items_size
 

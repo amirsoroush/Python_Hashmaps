@@ -1,9 +1,14 @@
+from __future__ import annotations
+
 import ctypes
 from abc import abstractmethod
-from collections.abc import Generator, Iterator
 from enum import Enum
+from typing import TYPE_CHECKING
 
 from .base import BaseHashMap, HashEntry, HashMapArgument, K, V, is_same
+
+if TYPE_CHECKING:
+    from collections.abc import Generator, Iterator
 
 
 class NotExist(Enum):

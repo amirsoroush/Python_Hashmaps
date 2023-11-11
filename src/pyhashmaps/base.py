@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from collections.abc import Hashable, Iterator, MutableMapping, Mapping, Iterable
+from collections.abc import Hashable, Iterable, Iterator, Mapping, MutableMapping
 from dataclasses import dataclass
 from typing import Any, Generic, Protocol, TypeVar
 
@@ -35,7 +35,7 @@ class HashEntry(Generic[K, V]):
 
 class Chain(Protocol[K, V]):
     """
-    A protocol for classes which are intended to be used as the underlying 
+    A protocol for classes which are intended to be used as the underlying
     data structure for storing objects in 'separate chaining' method.
     """
 
@@ -67,7 +67,7 @@ class Chain(Protocol[K, V]):
 
 class BaseHashMap(MutableMapping[K, V]):
     """
-    An abstract base class which is the parent of all classes implementing hashtables 
+    An abstract base class which is the parent of all classes implementing hashtables
     using either methods(open addressing, separete chaining)
     """
 
@@ -96,7 +96,7 @@ class BaseHashMap(MutableMapping[K, V]):
     @abstractmethod
     def _increase_size(self) -> None:
         """
-        increases the size of the hash table based on the criteria 
+        increases the size of the hash table based on the criteria
         specified by subclasses.
         """
         pass

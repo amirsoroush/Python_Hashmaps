@@ -1,8 +1,12 @@
-from collections.abc import Generator, Iterator
+from __future__ import annotations
+
 from dataclasses import dataclass, field
-from typing import Generic, Optional, cast
+from typing import TYPE_CHECKING, Generic, cast
 
 from .base import Chain, Comp_K, HashEntry, K, V, is_same
+
+if TYPE_CHECKING:
+    from collections.abc import Generator, Iterator
 
 
 @dataclass(slots=True)
@@ -10,9 +14,7 @@ class LinkedListNode(Generic[K, V]):
     """Node implementation used in the LinkedList class"""
 
     data: HashEntry[K, V]
-    next: Optional["LinkedListNode[K, V]"] = field(
-        default=None, repr=False, compare=False
-    )
+    next: LinkedListNode[K, V] | None = field(default=None, repr=False, compare=False)
 
 
 @dataclass(slots=True)
@@ -20,15 +22,9 @@ class BSTNode(Generic[Comp_K, V]):
     """Node implementation used in the BinarySearchTree class"""
 
     data: HashEntry[Comp_K, V]
-    left: Optional["BSTNode[Comp_K, V]"] = field(
-        default=None, repr=False, compare=False
-    )
-    right: Optional["BSTNode[Comp_K, V]"] = field(
-        default=None, repr=False, compare=False
-    )
-    parent: Optional["BSTNode[Comp_K, V]"] = field(
-        default=None, repr=False, compare=False
-    )
+    left: BSTNode[Comp_K, V] | None = field(default=None, repr=False, compare=False)
+    right: BSTNode[Comp_K, V] | None = field(default=None, repr=False, compare=False)
+    parent: BSTNode[Comp_K, V] | None = field(default=None, repr=False, compare=False)
 
 
 class DynamicArray(Chain[K, V]):
