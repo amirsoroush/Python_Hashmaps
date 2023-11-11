@@ -45,13 +45,13 @@ class Chain(Protocol[K, V]):
     def __len__(self) -> int:
         ...
 
-    def find(self, key: K) -> HashEntry[K, V]:
+    def find(self, key: K, hash_: int) -> HashEntry[K, V]:
         ...
 
     def insert(self, item: HashEntry[K, V]) -> None:
         ...
 
-    def delete(self, key: K) -> None:
+    def delete(self, key: K, hash_: int) -> None:
         ...
 
     def append_at_end(self, item: HashEntry[K, V]) -> None:

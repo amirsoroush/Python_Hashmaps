@@ -1,4 +1,5 @@
 # type: ignore
+# ruff: noqa
 import unittest
 from typing import TYPE_CHECKING
 
@@ -93,3 +94,38 @@ class BaseTestCase(base):
         hashmap = self.cls({"a": 10, "b": 20, "c": 30})
         dictionary = {"a": 10, "b": 20, "c": 30}
         self.assertEqual(hashmap, dictionary)
+
+    def test_accidental_same_slot(self):
+        """
+        hash functions can accidentally collide in a same bucket. This test
+        reveals this situation specifically in LinearProbingHashMap and
+        QuadraticProbingHashMap.
+        """
+
+        class A:
+            def __init__(self, var):
+                self.var = var
+
+            def __lt__(self, other):
+                if isinstance(other, A):
+                    return self.var < other.var
+                return NotImplemented
+
+            def __hash__(self) -> int:
+                return hash(self.var)
+
+            def __eq__(self, other: object) -> bool:
+                if isinstance(other, A):
+                    return self.var == other.var
+                return NotImplemented
+
+        hashmap = self.cls(initial_size=10)
+
+        obj = A(11)
+        # The A(11) object is placed into the second slot in the ten slots.
+        hashmap[obj] = "something1"
+
+        # A(21) also wants to go to the second slot in the ten slots.
+        obj.var = 21
+        hashmap[obj] = "something2"
+        self.assertEqual(len(hashmap), 2)

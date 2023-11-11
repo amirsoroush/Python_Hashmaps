@@ -1,4 +1,5 @@
 # type: ignore
+# ruff: noqa
 import unittest
 
 from src.pyhashmaps.separate_chaining import (

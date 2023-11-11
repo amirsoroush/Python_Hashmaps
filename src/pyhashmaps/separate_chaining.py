@@ -37,7 +37,7 @@ class SeparateChainingHashMap(BaseHashMap[K, V]):
         idx = h % self.size
 
         chain = self.slots[idx]
-        return chain.find(key).value
+        return chain.find(key, h).value
 
     def __setitem__(self, key: K, value: V) -> None:
         h = self._hash_func(key)
@@ -63,7 +63,7 @@ class SeparateChainingHashMap(BaseHashMap[K, V]):
         chain = self.slots[idx]
 
         chain_length_before = len(chain)
-        chain.delete(key)
+        chain.delete(key, h)
         chain_length_after = len(chain)
 
         if chain_length_before != chain_length_after:

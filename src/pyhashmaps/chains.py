@@ -37,23 +37,23 @@ class DynamicArray(Chain[K, V]):
     def __iter__(self) -> Iterator[HashEntry[K, V]]:
         yield from self.lst
 
-    def find(self, key: K) -> HashEntry[K, V]:
+    def find(self, key: K, hash_: int) -> HashEntry[K, V]:
         for e in self.lst:
-            if is_same(e.key, key):
+            if hash_ == e.hash_value and is_same(e.key, key):
                 return e
         raise KeyError(repr(key))
 
     def insert(self, item: HashEntry[K, V]) -> None:
         for idx, e in enumerate(self.lst):
-            if is_same(item.key, e.key):
+            if item.hash_value == e.hash_value and is_same(item.key, e.key):
                 self.lst[idx] = item
                 break
         else:
             self.lst.append(item)
 
-    def delete(self, key: K) -> None:
+    def delete(self, key: K, hash_: int) -> None:
         for idx, e in enumerate(self.lst):
-            if is_same(key, e.key):
+            if hash_ == e.hash_value and is_same(key, e.key):
                 del self.lst[idx]
                 return
         raise KeyError(repr(key))
@@ -77,10 +77,12 @@ class LinkedList(Chain[K, V]):
             yield current.data
             current = current.next
 
-    def find(self, key: K) -> HashEntry[K, V]:
+    def find(self, key: K, hash_: int) -> HashEntry[K, V]:
         current_node = self.head
         while current_node:
-            if is_same(current_node.data.key, key):
+            if hash_ == current_node.data.hash_value and is_same(
+                current_node.data.key, key
+            ):
                 return current_node.data
             current_node = current_node.next
         raise KeyError(repr(key))
@@ -88,18 +90,22 @@ class LinkedList(Chain[K, V]):
     def insert(self, item: HashEntry[K, V]) -> None:
         current_node = self.head
         while current_node:
-            if is_same(current_node.data.key, item.key):
+            if item.hash_value == current_node.data.hash_value and is_same(
+                current_node.data.key, item.key
+            ):
                 current_node.data = item
                 break
             current_node = current_node.next
         else:
             self.insert_tail(item)
 
-    def delete(self, key: K) -> None:
+    def delete(self, key: K, hash_: int) -> None:
         current_node = self.head
         previous_node = self.head
         while current_node is not None:
-            if is_same(current_node.data.key, key):
+            if hash_ == current_node.data.hash_value and is_same(
+                current_node.data.key, key
+            ):
                 if current_node is self.head:
                     self.head = current_node.next
                 else:
@@ -136,8 +142,8 @@ class BinarySearchTree(Chain[Comp_K, V]):
     def __iter__(self) -> Iterator[HashEntry[Comp_K, V]]:
         yield from self.inorder_traversal(self.root)
 
-    def find(self, key: Comp_K) -> HashEntry[Comp_K, V]:
-        return self.find_node(key).data
+    def find(self, key: Comp_K, hash_: int) -> HashEntry[Comp_K, V]:
+        return self.find_node(key, hash_).data
 
     def insert(self, item: HashEntry[Comp_K, V]) -> None:
         new_node = BSTNode(item)
@@ -149,7 +155,9 @@ class BinarySearchTree(Chain[Comp_K, V]):
 
         current_node = self.root
         while True:
-            if is_same(item.key, current_node.data.key):
+            if item.hash_value == current_node.data.hash_value and is_same(
+                item.key, current_node.data.key
+            ):
                 current_node.data = item
                 return
             if item.key < current_node.data.key:
@@ -167,8 +175,8 @@ class BinarySearchTree(Chain[Comp_K, V]):
                     return
                 current_node = current_node.right
 
-    def delete(self, key: Comp_K) -> None:
-        node = self.find_node(key)
+    def delete(self, key: Comp_K, hash_: int) -> None:
+        node = self.find_node(key, hash_)
 
         # Node has no children
         if node.left is None and node.right is None:
@@ -185,7 +193,7 @@ class BinarySearchTree(Chain[Comp_K, V]):
         # Node has both left and right children
         else:
             temp_node = self.find_biggest_node(node.left)
-            self.delete(temp_node.data.key)
+            self.delete(temp_node.data.key, temp_node.data.hash_value)
             node.data = temp_node.data
 
     def inorder_traversal(
@@ -197,10 +205,12 @@ class BinarySearchTree(Chain[Comp_K, V]):
         yield node.data
         yield from self.inorder_traversal(node.right)
 
-    def find_node(self, key: Comp_K) -> BSTNode[Comp_K, V]:
+    def find_node(self, key: Comp_K, hash_: int) -> BSTNode[Comp_K, V]:
         current_node = self.root
         while current_node is not None:
-            if is_same(current_node.data.key, key):
+            if hash_ == current_node.data.hash_value and is_same(
+                current_node.data.key, key
+            ):
                 return current_node
             if key < current_node.data.key:
                 current_node = current_node.left
