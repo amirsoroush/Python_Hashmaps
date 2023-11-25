@@ -2,19 +2,51 @@
 
 `pyhashmaps` is a fully annotated Python package which has several functional hashmap classes for educational purposes.
 
-All classes support common operations on [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping) type.
+All classes support common operations on [ `MutableMapping` ](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping) type.
 
-It has a class hierarchy of:
+Here are the relationships between components of this package:
 
-```none
-- Open Addressing:
-    - Linear Probing
-    - Quadratic Probing
-    - Double Hashing
-- Separate Chaining:
-    - Using DynamicArray
-    - Using LinkedList
-    - Using Binary Search Tree
+```mermaid
+classDiagram
+    class MutableMapping
+    class BaseHM
+
+    class OpenAddressingHM {list slots}
+    class LinearProbingHM
+    class QuadraticProbingHM
+    class DoubleHashingHM
+
+    class SeparateChainingHM {list[Chain] slots}
+    class DynamicArrayHM {list[DynamicArray] slots}
+    class LinkedListHM {list[LinkedList] slots}
+    class BSTHM {list[BinarySearchTree] slots}
+
+    MutableMapping <|-- BaseHM
+    BaseHM <|-- OpenAddressingHM
+    BaseHM <|-- SeparateChainingHM
+    OpenAddressingHM <|-- LinearProbingHM
+    OpenAddressingHM <|-- QuadraticProbingHM
+    OpenAddressingHM <|-- DoubleHashingHM
+    SeparateChainingHM <|-- DynamicArrayHM
+    SeparateChainingHM <|-- LinkedListHM
+    SeparateChainingHM <|-- BSTHM
+```
+
+```mermaid
+classDiagram
+    class Chain {
+        <<interface>>
+        find()
+        insert()
+        delete()
+    }
+    class DynamicArray
+    class LinkedList
+    class BinarySearchTree
+
+    Chain <|-- DynamicArray
+    Chain <|-- LinkedList
+    Chain <|-- BinarySearchTree
 ```
 
 # Requirements
@@ -28,6 +60,7 @@ If you have `git` installed:
 ```none
 pip install git+https://github.com/amirsoroush/Python_Hashmaps.git
 ```
+
 Otherwise:
 
 ```none
